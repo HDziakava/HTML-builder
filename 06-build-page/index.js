@@ -13,13 +13,11 @@ fs.mkdir(coolPath, { recursive: true }, (err) => {
   if (err) {
     return console.error(err);
   }
-  console.log('Directory created successfully!');
 
   fs.writeFile(indexPath, '!DOCTYPE html', 'utf8', (err) => {
     if (err) {
       return console.error(err);
     }
-    console.log('Yes index');
   });
 
   fs.writeFile(
@@ -30,7 +28,6 @@ fs.mkdir(coolPath, { recursive: true }, (err) => {
       if (err) {
         return console.error(err);
       }
-      console.log('Yes style');
     },
   );
 
@@ -38,14 +35,11 @@ fs.mkdir(coolPath, { recursive: true }, (err) => {
     if (err) {
       return console.error(err);
     }
-    console.log('Second directory created successfully!');
 
     fs.cp(originAssetsPath, assetsPath, { recursive: true }, (err) => {
       if (err) {
         console.error(err);
       }
-
-      console.log('I did it');
     });
   });
 });
@@ -112,14 +106,11 @@ fs.readdir(stylesPath, { withFileTypes: true }, (err, files) => {
         if (err) {
           return console.error(err);
         }
-        console.log('Yes');
       });
     });
 
     readerStream.on('error', function (err) {
       console.log(err.stack);
     });
-
-    console.log('Program Ended');
   });
 });

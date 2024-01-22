@@ -23,15 +23,12 @@ fs.readdir(coolPath, { withFileTypes: true }, (err, files) => {
           if (err) {
             return console.error(err);
           }
-          console.log('Yes');
         });
       });
 
       readerStream.on('error', function (err) {
         console.log(err.stack);
       });
-
-      console.log('Program Ended');
     }
   });
 });
