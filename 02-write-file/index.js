@@ -1,5 +1,6 @@
 const fs = require('fs');
 const readline = require('readline');
+// const process = require('node:process');
 const path = require('path');
 
 const coolPath = path.join(__dirname, 'write.txt');
@@ -21,7 +22,7 @@ let sessionName = '';
 interface.question('Who are you?', (name) => {
   sessionName = name;
   console.log(`Hey there ${name}!`);
-  writableStream.write(`Hey there ${name}! `);
+  writableStream.write(`${name}! `);
 });
 
 interface.on('line', (input) => {
@@ -32,4 +33,10 @@ interface.on('line', (input) => {
     return;
   }
   writableStream.write(`${input} `);
+});
+
+interface.on('SIGINT', () => {
+  console.log(`Farewell ${sessionName}!`);
+  writableStream.write(`Farewell ${sessionName}! `);
+  interface.close();
 });
