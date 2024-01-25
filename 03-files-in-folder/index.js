@@ -19,7 +19,7 @@ fs.readdir(folderToRead, { withFileTypes: true }, (err, files) => {
         if (err) {
           console.error(err);
         }
-        console.log(`${fileName} - ${ext} - ${stats.size * 1024}kb`);
+        console.log(`${fileName} - ${ext} - ${stats.size / 1000}kb`);
       });
     }
   });
