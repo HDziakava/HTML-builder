@@ -1,6 +1,5 @@
 const fs = require('fs');
 const readline = require('readline');
-// const process = require('node:process');
 const path = require('path');
 
 const coolPath = path.join(__dirname, 'write.txt');
@@ -20,6 +19,12 @@ writableStream.on('error', (error) => {
 let sessionName = '';
 
 interface.question('Who are you?', (name) => {
+  if (name.toLowerCase() === 'exit') {
+    console.log(`Farewell!`);
+    writableStream.write(`Farewell! `);
+    interface.close();
+    return;
+  }
   sessionName = name;
   console.log(`Hey there ${name}!`);
   writableStream.write(`${name}! `);
@@ -27,9 +32,9 @@ interface.question('Who are you?', (name) => {
 
 interface.on('line', (input) => {
   if (input.toLowerCase() === 'exit') {
-    interface.close();
     console.log(`Farewell ${sessionName}!`);
     writableStream.write(`Farewell ${sessionName}! `);
+    interface.close();
     return;
   }
   writableStream.write(`${input} `);
