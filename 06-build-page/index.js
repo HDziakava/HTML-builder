@@ -53,37 +53,28 @@ readerStream.setEncoding('UTF8');
 readerStream.on('data', function (chunk) {
   template = chunk;
 
-  const articlesPath = path.join(__dirname, 'components/articles.html');
-  const footerPath = path.join(__dirname, 'components/footer.html');
-  const headerPath = path.join(__dirname, 'components/header.html');
+  fs.readdir(path.join(__dirname, 'components'), (err, files) => {
+    files.forEach((file) => {
+      const filePath = path.join(__dirname, `components/${file}`);
 
-  const articlesStream = fs.createReadStream(articlesPath);
-  const footerStream = fs.createReadStream(footerPath);
-  const headerStream = fs.createReadStream(headerPath);
+      const stream = fs.createReadStream(filePath);
 
-  articlesStream.setEncoding('UTF8');
-  footerStream.setEncoding('UTF8');
-  headerStream.setEncoding('UTF8');
+      stream.setEncoding('UTF8');
 
-  const processTemplate = (template) => {
-    if (!(template.includes('{{') && template.includes('}}'))) {
-      writableStream.write(template);
-    }
-  };
+      const processTemplate = (template) => {
+        if (!(template.includes('{{') && template.includes('}}'))) {
+          writableStream.write(template);
+        }
+      };
 
-  articlesStream.on('data', function (articlesChunk) {
-    template = template.replace('{{articles}}', articlesChunk);
-    processTemplate(template);
-  });
-
-  footerStream.on('data', function (footerChunk) {
-    template = template.replace('{{footer}}', footerChunk);
-    processTemplate(template);
-  });
-
-  headerStream.on('data', function (headerChunk) {
-    template = template.replace('{{header}}', headerChunk);
-    processTemplate(template);
+      stream.on('data', function (chunk) {
+        template = template.replace(
+          `{{${file.slice(0, file.lastIndexOf('.'))}}}`,
+          chunk,
+        );
+        processTemplate(template);
+      });
+    });
   });
 });
 
