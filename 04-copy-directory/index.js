@@ -9,9 +9,28 @@ fs.mkdir(coolPath, { recursive: true }, (err) => {
     return console.error(err);
   }
 
+  let isLast = false;
+
   fs.readdir(coolPath, (err, files) => {
+    if (files.length === 0) {
+      isLast = true;
+
+      if (isLast) {
+        fs.readdir(folderPath, (err, files) => {
+          files.forEach((file) => {
+            const filePath = path.join(__dirname, `files/${file}`);
+
+            fs.copyFile(filePath, path.join(coolPath, file), (err) => {
+              if (err) throw err;
+              console.log(`${file} was copied to 'files-copy'`);
+            });
+          });
+        });
+      }
+    }
+
     files.forEach((file, index) => {
-      const isLast = index === files.length - 1;
+      isLast = index === files.length - 1;
       fs.rm(path.join(coolPath, file), (err) => {
         if (err) {
           return console.error(err);
