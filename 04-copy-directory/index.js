@@ -8,21 +8,27 @@ fs.mkdir(coolPath, { recursive: true }, (err) => {
   if (err) {
     return console.error(err);
   }
-  console.log('Directory created successfully!');
 
-  fs.readdir(folderPath, (err, files) => {
-    files.forEach((file) => {
-      const filePath = path.join(__dirname, `files/${file}`);
-
+  fs.readdir(coolPath, (err, files) => {
+    files.forEach((file, index) => {
+      const isLast = index === files.length - 1;
       fs.rm(path.join(coolPath, file), (err) => {
         if (err) {
           return console.error(err);
         }
-      });
 
-      fs.copyFile(filePath, path.join(coolPath, file), (err) => {
-        if (err) throw err;
-        console.log(`${file} was copied to 'files-copy'`);
+        if (isLast) {
+          fs.readdir(folderPath, (err, files) => {
+            files.forEach((file) => {
+              const filePath = path.join(__dirname, `files/${file}`);
+
+              fs.copyFile(filePath, path.join(coolPath, file), (err) => {
+                if (err) throw err;
+                console.log(`${file} was copied to 'files-copy'`);
+              });
+            });
+          });
+        }
       });
     });
   });
