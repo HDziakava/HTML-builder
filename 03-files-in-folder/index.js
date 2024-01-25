@@ -15,10 +15,12 @@ fs.readdir(folderToRead, { withFileTypes: true }, (err, files) => {
       const name = file.name;
       const filePath = path.join(coolPath, name);
 
-      const stats = fs.statSync(filePath);
-      const fileSizeInBytes = stats.size;
-
-      console.log(`${fileName} - ${ext} - ${fileSizeInBytes}kb`);
+      const stats = fs.stat(filePath, (err, stats) => {
+        if (err) {
+          console.error(err);
+        }
+        console.log(`${fileName} - ${ext} - ${stats.size * 1024}kb`);
+      });
     }
   });
 });
